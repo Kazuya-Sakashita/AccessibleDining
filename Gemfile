@@ -82,3 +82,5 @@ end
 
 gem 'devise'
 gem 'kaminari'
+
+gem 'config'
