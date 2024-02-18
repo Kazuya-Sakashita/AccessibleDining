@@ -15,7 +15,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_05_103415) do
   enable_extension "plpgsql"
 
   create_table "restaurants", force: :cascade do |t|
-
     t.string "name", null: false, comment: "店名"
     t.string "nearest_station", comment: "最寄り駅"
     t.integer "budget", comment: "予算"
