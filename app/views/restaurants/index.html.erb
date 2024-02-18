@@ -1,0 +1,19 @@
+<div class="container mx-auto px-4">
+  <div class="grid grid-cols-4 gap-4">
+    <% @restaurants.each do |restaurant| %>
+      <div class="bg-yellow-100 border border-yellow-400 rounded-lg p-4">
+        <h2 class="font-bold text-lg mb-2 text-yellow-800"><%= restaurant.name %></h2>
+        <p class="text-yellow-700"><%= restaurant.description %></p>
+        <p class="text-sm text-yellow-600">最寄り駅: <%= restaurant.nearest_station %></p>
+        <p class="text-sm text-yellow-600">予算: <%= restaurant.budget %>円</p>
+        <p class="text-sm text-yellow-600">カテゴリ: <%= restaurant.category %></p>
+        <p class="text-sm text-yellow-600">住所: <%= restaurant.address %></p>
+        <p class="text-sm text-yellow-600">市町村: <%= restaurant.city %></p>
+        <p class="text-sm text-yellow-600">地区: <%= restaurant.district %></p>
+        <p class="text-sm text-yellow-600">電話番号: <%= restaurant.phone_number %></p>
+        <p class="text-sm text-yellow-600">営業時間: <%= restaurant.business_hours %></p>
+      </div>
+    <% end %>
+  </div>
+  <%= paginate @restaurants %>
+</div>
