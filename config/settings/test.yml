@@ -1,0 +1,3 @@
+pagination:
+  per:
+    default: 1
