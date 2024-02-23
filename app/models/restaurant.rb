@@ -1,3 +1,3 @@
 class Restaurant < ApplicationRecord
-  has_many :restaurant_images, dependent: :destroy
+  has_many_attached :images, dependent: :destroy
 end
