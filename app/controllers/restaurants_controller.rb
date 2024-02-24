@@ -3,7 +3,9 @@ class RestaurantsController < ApplicationController
     @restaurants = Restaurant.page(params[:page]).per(Settings.pagination.per.default)
   end
 
-  def show; end
+  def show
+    @restaurant = Restaurant.includes(:restaurant_images).find(params[:id])
+  end
 
   def new
     @restaurant = Restaurant.new

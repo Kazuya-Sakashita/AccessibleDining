@@ -84,3 +84,4 @@ gem 'devise'
 gem 'kaminari'
 
 gem 'config'
+gem 'image_processing', '~> 1.2'

@@ -12,15 +12,18 @@ class RestaurantForm
   end
 
   def initialize(restaurant_id: nil, restaurant_images: [])
-    @photos = []
-    restaurant_images.reject(&:blank?)&.each do |image|
-      @photos << RestaurantImage.new(image_url: image, restaurant_id:)
-    end
+    @restaurant_id = restaurant_id
+    @photos = restaurant_images.reject(&:blank?)
   end
 
   def save!
-    raise ActiveRecord::RecordInvalid, self if invalid?
+    raise ActiveModel::ValidationError, self unless valid?
 
-    @photos.each(&:save!)
+    @photos.each do |photo|
+      restaurant_image = RestaurantImage.new(restaurant_id: @restaurant_id)
+      # ここでActive Storageを使用して画像を添付する
+      restaurant_image.image.attach(photo) if photo.is_a?(ActionDispatch::Http::UploadedFile)
+      restaurant_image.save!
+    end
   end
 end
