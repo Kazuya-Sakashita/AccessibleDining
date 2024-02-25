@@ -1,0 +1,91 @@
+ja:
+  hello: "こんにちは"
+  errors:
+    format: "%{message}"
+    messages:
+      record_invalid: "バリデーションに失敗しました: %{errors}"
+      restrict_dependent_destroy:
+        one: "このオブジェクトは関連する%{record}が存在するため削除できません。"
+        many: "このオブジェクトは複数の関連する%{record}が存在するため削除できません。"
+  blank_error_message: &blank_error_message "%{attribute}を入力してください。"
+  activerecord:
+    models:
+      user: "ユーザー"
+      post: "投稿"
+      restaurant: "レストラン"
+    attributes:
+      user:
+        name: "名前"
+        email: "メールアドレス"
+        password: "パスワード"
+      post:
+        title: "タイトル"
+        body: "本文"
+      restaurant:
+        name: "店名"
+        nearest_station: "最寄り駅"
+        budget: "予算"
+        category: "カテゴリ"
+        postal_code: "郵便番号"
+        address: "住所"
+        city: "市町村"
+        district: "地区"
+        latitude: "緯度"
+        longitude: "経度"
+        phone_number: "電話番号"
+        business_hours: "営業時間"
+        description: "説明"
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "メールアドレスを入力してください。"
+              taken: "このメールアドレスは既に使用されています。"
+        post:
+          attributes:
+            title:
+              blank: "タイトルを入力してください。"
+            body:
+              blank: "本文を入力してください。"
+        restaurant:
+          attributes:
+            name:
+              blank: *blank_error_message
+            nearest_station:
+              blank: *blank_error_message
+            budget:
+              blank: *blank_error_message
+            category:
+              blank: *blank_error_message
+            postal_code:
+              blank: *blank_error_message
+            address:
+              blank: *blank_error_message
+            city:
+              blank: *blank_error_message
+            district:
+              blank: *blank_error_message
+            latitude:
+              blank: *blank_error_message
+            longitude:
+              blank: *blank_error_message
+            phone_number:
+              blank: *blank_error_message
+            business_hours:
+              blank: *blank_error_message
+            description:
+              blank: *blank_error_message
+
+  helpers:
+    submit:
+      create: "作成する"
+      update: "更新する"
+  flash:
+    actions:
+      create:
+        notice: "%{model}が正常に作成されました。"
+      update:
+        notice: "%{model}が正常に更新されました。"
+      destroy:
+        notice: "%{model}が正常に削除されました。"
