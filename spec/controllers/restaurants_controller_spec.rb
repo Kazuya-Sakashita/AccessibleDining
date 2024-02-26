@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe RestaurantsController, type: :controller do
   render_views
 
-  context 'restaurants/new' do
+  context 'restaurants/create' do
     context '正常系' do
       # パラメーターを設定する
       let!(:restaurant_images) do
