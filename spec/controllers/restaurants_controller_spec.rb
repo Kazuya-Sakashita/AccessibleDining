@@ -45,10 +45,71 @@ RSpec.describe RestaurantsController, type: :controller do
         expect(response).to redirect_to restaurant_path(Restaurant.last.id)
       end
 
-      it '新しいレストランが作成されること' do
+      it '新しいレストランが作成されていること' do
         expect do
           post :create, params: restaurant_params
         end.to change(Restaurant, :count).by(1)
+      end
+
+      it '各パラメータに正しく値が設定された場合、flash画面が正しく表示されていること' do
+        post :create, params: restaurant_params
+        expect(flash[:notice]).to eq '登録完了しました。'
+      end
+    end
+
+    context '異常系' do # パラメーターを設定する
+      let(:restaurant_params) do
+        {
+          restaurant_for: {
+            restaurant_images: {
+              photos: nil
+            }
+          },
+          restaurant: {
+            name: nil,
+            nearest_station: nil,
+            budget: nil,
+            category: nil,
+            postal_code: nil,
+            city: nil,
+            district: nil,
+            latitude: nil,
+            longitude: nil,
+            phone_number: nil,
+            business_hours: nil,
+            description: nil
+          }
+        }
+      end
+
+      it '登録時、各パラメータに正しく値が設定されなかった場合、登録画面が描画されること' do
+        post :create, params: restaurant_params
+        expect(response).to render_template(:new)
+      end
+
+      it '新しいレストランが作成されないこと' do
+        expect do
+          post :create, params: restaurant_params
+        end.to change(Restaurant, :count).by(0)
+      end
+
+      it '各パラメータに正しく値が設定されていなかあった場合、flash画面が正しく表示されていること' do
+        post :create, params: restaurant_params
+        expect(flash[:alert]).to eq [
+          '店名を入力してください。',
+          '最寄り駅を入力してください。',
+          '予算を入力してください。',
+          'カテゴリを入力してください。',
+          '郵便番号を入力してください。',
+          '住所を入力してください。',
+          '市町村を入力してください。',
+          '地区を入力してください。',
+          '緯度を入力してください。',
+          '経度を入力してください。',
+          '電話番号を入力してください。',
+          '営業時間を入力してください。',
+          '説明を入力してください。'
+        ]
       end
     end
   end
