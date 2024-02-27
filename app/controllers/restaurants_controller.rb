@@ -1,6 +1,6 @@
 class RestaurantsController < ApplicationController
   def index
-    @restaurants = Restaurant.page(params[:page]).per(Settings.pagination.per.default)
+    @restaurants = Restaurant.includes(:restaurant_images).page(params[:page]).per(Settings.pagination.per.default)
   end
 
   def show
