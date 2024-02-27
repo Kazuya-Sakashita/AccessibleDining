@@ -1,0 +1,9 @@
+<% if object.errors[field].any? %>
+  <div class="mt-1">
+    <% object.errors[field].each do |error| %>
+      <p class="text-xs italic text-red-600 bg-red-100 border border-red-400 rounded p-2">
+        <%= error %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

@@ -84,3 +84,5 @@ gem 'devise'
 gem 'kaminari'
 
 gem 'config'
+gem 'image_processing', '~> 1.2'
+gem 'rails-i18n'

@@ -62,4 +62,9 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   config.include FactoryBot::Syntax::Methods
+
+  # ファイルをアップロードする必要がある場合は、参照（ドキュメントより）
+  config.include ActionDispatch::TestProcess::FixtureFile
+
+  config.include Devise::Test::ControllerHelpers, type: :controller
 end

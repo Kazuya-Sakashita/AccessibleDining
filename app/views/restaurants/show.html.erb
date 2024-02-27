@@ -1,4 +1,24 @@
-<div>
-  <h1 class="font-bold text-4xl">Restaurants#show</h1>
-  <p>Find me in app/views/restaurants/show.html.erb</p>
-</div>
+<div class="max-w-4xl mx-auto bg-yellow-50 p-8 shadow-lg rounded-lg">
+  <h2 class="text-2xl font-bold mb-2 text-gray-800"><%= @restaurant.name %></h2>
+  <p class="text-md text-gray-600 mb-4">最寄り駅: <%= @restaurant.nearest_station %></p>
+  <p class="text-md text-gray-600 mb-4">予算: ¥<%= @restaurant.budget %></p>
+  <p class="text-md text-gray-600 mb-4">カテゴリ: <%= @restaurant.category %></p>
+  <p class="text-md text-gray-600 mb-4">郵便番号: <%= @restaurant.postal_code %></p>
+  <p class="text-md text-gray-600 mb-4">住所: <%= @restaurant.address %>, <%= @restaurant.city %>, <%= @restaurant.district %></p>
+  <p class="text-md text-gray-600 mb-4">緯度: <%= @restaurant.latitude %>, 経度: <%= @restaurant.longitude %></p>
+  <p class="text-md text-gray-600 mb-4">電話番号: <%= @restaurant.phone_number %></p>
+  <p class="text-md text-gray-600 mb-4">営業時間: <%= @restaurant.business_hours %></p>
+  <p class="text-md text-gray-600 mb-4">説明: <%= @restaurant.description %></p>
+
+  <!-- 画像の表示 -->
+  <% @restaurant.restaurant_images.each_slice(2) do |images| %>
+    <div class="flex flex-col md:flex-row md:space-x-4 mt-4">
+      <% images.each do |image| %>
+        <% if image.image.attached? %>
+          <div class="flex-1">
+            <%= image_tag image.image, class: "w-full h-auto rounded-lg shadow-md object-cover" %>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
