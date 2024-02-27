@@ -4,6 +4,7 @@ RSpec.describe RestaurantForm, type: :model do
   let(:restaurant) { create(:restaurant) }
   let(:valid_images) { [fixture_file_upload('images/test_image.jpeg', 'image/jpeg')] * 2 } # 2枚の画像を想定
   let(:invalid_images) { [] } # 無効な画像リスト（空）
+  let(:excessive_images) { [fixture_file_upload('images/test_image.jpeg', 'image/jpeg')] * 5 } # 5枚の画像を想定
 
   describe '初期化' do
     let(:form) { RestaurantForm.new(restaurant_id: restaurant.id, restaurant_images: valid_images) }
@@ -24,11 +25,22 @@ RSpec.describe RestaurantForm, type: :model do
     end
 
     context '添付枚数が規定外の場合' do
-      let(:form) { RestaurantForm.new(restaurant_images: invalid_images) }
+      context '添付枚数が0枚の場合' do
+        let(:form) { RestaurantForm.new(restaurant_images: invalid_images) }
 
-      it '無効である' do
-        form.valid?
-        expect(form.errors[:photos]).to include('添付枚数を確認してください。')
+        it '無効である' do
+          form.valid?
+          expect(form.errors[:photos]).to include('添付枚数を確認してください。')
+        end
+      end
+
+      context '添付枚数が5枚の場合' do
+        let(:form) { RestaurantForm.new(restaurant_images: excessive_images) }
+
+        it '無効である' do
+          form.valid?
+          expect(form.errors[:photos]).to include('添付枚数を確認してください。')
+        end
       end
     end
   end
