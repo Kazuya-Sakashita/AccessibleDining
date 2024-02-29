@@ -1,14 +1,14 @@
 FactoryBot.define do
   factory :restaurant_image do
+    association :restaurant
+
     after(:build) do |restaurant_image|
+      image_path = Rails.root.join('spec/fixtures/files/images/test_image.jpeg')
       restaurant_image.image.attach(
-        io: File.open('spec/fixtures/files/images/test_image.jpeg'),
-        filename: 'test_image.jpeg', # ファイルの実際の拡張子に合わせて修正
-        content_type: 'image/jpeg'   # MIMEタイプをファイルの種類に合わせて修正
+        io: File.open(image_path),
+        filename: 'test_image.jpeg',
+        content_type: 'image/jpeg'
       )
     end
-
-    # `association`を`factory`ブロック内に移動
-    association :restaurant
   end
 end
