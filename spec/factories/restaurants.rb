@@ -11,7 +11,7 @@ FactoryBot.define do
     latitude { Faker::Address.latitude }
     longitude { Faker::Address.longitude }
     phone_number { Faker::PhoneNumber.phone_number }
-    business_hours { '10:00〜21:00' } # この部分はFakerではなく固定値を使用しています
+    business_hours { '10:00〜21:00' }
     description { Faker::Lorem.sentence }
   end
 end

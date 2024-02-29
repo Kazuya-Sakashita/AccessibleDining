@@ -3,7 +3,10 @@
   <div class="grid grid-cols-4 gap-4 mt-4">
     <% @restaurants.each do |restaurant| %>
       <div class="bg-yellow-100 border border-yellow-400 rounded-lg p-4">
-        <h2 class="font-bold text-lg mb-2 text-yellow-800"><%= restaurant.name %></h2>
+        <% if restaurant.restaurant_images.any? && restaurant.restaurant_images.first.image.attached? %>
+          <%= image_tag restaurant.restaurant_images.first.image, class: "w-full h-auto rounded-lg shadow-md object-cover" %>
+        <% end %>
+        <h2 class="font-bold text-lg my-2 text-yellow-800"><%= restaurant.name %></h2>
         <p class="text-yellow-700"><%= restaurant.description %></p>
         <p class="text-sm text-yellow-600">最寄り駅: <%= restaurant.nearest_station %></p>
         <p class="text-sm text-yellow-600">予算: <%= restaurant.budget %>円</p>
