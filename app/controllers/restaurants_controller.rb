@@ -1,11 +1,11 @@
 class RestaurantsController < ApplicationController
+  before_action :set_restaurant, only: %i[show edit update destroy]
+
   def index
     @restaurants = Restaurant.includes(:restaurant_images).page(params[:page]).per(Settings.pagination.per.default)
   end
 
-  def show
-    @restaurant = Restaurant.includes(:restaurant_images).find(params[:id])
-  end
+  def show; end
 
   def new
     @restaurant = Restaurant.new
@@ -13,7 +13,7 @@ class RestaurantsController < ApplicationController
   end
 
   def create
-    @restaurant = Restaurant.build(restaurant_params)
+    @restaurant = Restaurant.new(restaurant_params)
 
     ActiveRecord::Base.transaction do
       @restaurant.save!
@@ -42,6 +42,8 @@ class RestaurantsController < ApplicationController
 
   def edit; end
 
+  def update; end
+
   private
 
   def restaurant_params
@@ -52,5 +54,9 @@ class RestaurantsController < ApplicationController
 
   def restaurant_images
     params.dig(:restaurant_form, :photos) || []
+  end
+
+  def set_restaurant
+    @restaurant = Restaurant.find(params[:id])
   end
 end
