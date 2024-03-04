@@ -40,9 +40,31 @@ class RestaurantsController < ApplicationController
 
   def destroy; end
 
-  def edit; end
+  def edit
+    @restaurant_images = RestaurantForm.new if @restaurant.restaurant_images.blank?
+  end
 
-  def update; end
+  def update
+    ActiveRecord::Base.transaction do
+      @restaurant.update!(restaurant_params)
+
+      # 安全にparamsからrestaurant_images_paramsを取得
+      restaurant_images_params = params.dig(:restaurant_for, :restaurant_images, :photos)&.reject(&:blank?)
+
+      if restaurant_images_params.present?
+        @restaurant.restaurant_images.destroy_all
+        @restaurant_images = RestaurantForm.new(restaurant_id: @restaurant.id,
+                                                restaurant_images: restaurant_images_params)
+        @restaurant_images.save!
+      end
+    end
+
+    flash[:notice] = '更新が完了しました。'
+    redirect_to restaurant_path(@restaurant)
+  rescue ActiveRecord::RecordInvalid => e
+    flash[:alert] = e.record.errors.full_messages
+    render :edit, status: :unprocessable_entity
+  end
 
   private
 
