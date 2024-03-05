@@ -38,7 +38,10 @@ class RestaurantsController < ApplicationController
     render :new, status: :unprocessable_entity
   end
 
-  def destroy; end
+  def destroy
+    @restaurant.destroy
+    redirect_to root_path, notice: 'レストランが削除されました。'
+  end
 
   def edit
     @restaurant_images = RestaurantForm.new if @restaurant.restaurant_images.blank?
