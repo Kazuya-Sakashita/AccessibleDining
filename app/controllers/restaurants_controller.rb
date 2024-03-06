@@ -40,7 +40,7 @@ class RestaurantsController < ApplicationController
 
   def destroy
     @restaurant.destroy
-    redirect_to root_path, notice: 'レストランが削除されました。'
+    redirect_to root_path, notice: 'レストラン情報が削除されました。'
   end
 
   def edit

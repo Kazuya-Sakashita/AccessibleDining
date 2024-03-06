@@ -216,4 +216,31 @@ RSpec.describe RestaurantsController, type: :controller do
       end
     end
   end
+
+  describe 'restaurants/destroy' do
+    let!(:restaurant) { create(:restaurant) }
+    let!(:restaurant_images) { create_list(:restaurant_image, 3, restaurant:) }
+
+    it 'レストラン情報の削除' do
+      expect do
+        delete :destroy, params: { id: restaurant.id }
+      end.to change(Restaurant, :count).by(-1)
+    end
+
+    it '紐づく画像も一緒に削除される' do
+      delete :destroy, params: { id: restaurant.id }
+
+      expect(RestaurantImage.where(restaurant_id: restaurant.id)).to be_empty
+    end
+
+    it '削除後にレストラン一覧ページにリダイレクトする' do
+      delete :destroy, params: { id: restaurant.id }
+      expect(response).to redirect_to root_path
+    end
+
+    it '削除が完了した後、適切なフラッシュメッセージが表示される' do
+      delete :destroy, params: { id: restaurant.id }
+      expect(flash[:notice]).to eq 'レストラン情報が削除されました。'
+    end
+  end
 end
