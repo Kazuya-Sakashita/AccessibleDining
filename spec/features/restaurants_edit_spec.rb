@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.feature 'ホーム画面', type: :feature do
   describe 'レストラン編集画面表示' do
     let!(:restaurant) { create(:restaurant) } # 事前にレストランを1つ作成
+    let!(:existing_images) { create_list(:restaurant_image, 3, restaurant:) } # 事前にレストランに3つの画像を登録
 
     context 'パラメーターに正しく設定されている場合' do
       before do
@@ -44,6 +45,30 @@ RSpec.feature 'ホーム画面', type: :feature do
 
         # 新しい画像が表示されていることを確認（画像の検証は実際のsrc属性や画像のパスに応じて調整が必要です）
         expect(page).to have_selector("img[src*='new_image.jpeg']")
+      end
+
+      scenario 'すべての既存の画像が削除され、新しい画像が登録されていること' do
+        # 更新前の画像数を確認
+        expect(restaurant.restaurant_images.count).to eq 3
+
+        # 新しい画像を登録
+        attach_file 'restaurant_for[restaurant_images][photos][]', [
+          Rails.root.join('spec/fixtures/files/images/new_image1.jpeg'),
+          Rails.root.join('spec/fixtures/files/images/new_image2.jpeg')
+        ]
+
+        click_button '更新する'
+
+        # ページに新しい画像が表示されていることを確認
+        expect(page).to have_selector("img[src*='new_image1.jpeg']")
+        expect(page).to have_selector("img[src*='new_image2.jpeg']")
+
+        # データベースに更新が反映されていることを確認
+        restaurant.reload
+        expect(restaurant.restaurant_images.count).to eq 2 # 更新後の画像数が2になっていることを確認
+        expect(restaurant.restaurant_images.map do |ri|
+                 ri.image.filename.to_s
+               end).to match_array(['new_image1.jpeg', 'new_image2.jpeg'])
       end
     end
 
