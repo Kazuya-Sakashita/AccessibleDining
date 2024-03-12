@@ -114,3 +114,9 @@ ja:
         notice: "%{model}が正常に更新されました。"
       destroy:
         notice: "%{model}が正常に削除されました。"
+  restaurants:
+    name: "店名"
+    nearest_station: "最寄り駅"
+    budget: "予算"
+    category: "カテゴリ"
+    description: "説明"
