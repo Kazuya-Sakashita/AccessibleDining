@@ -1,21 +1,23 @@
 <div class="max-w-4xl mx-auto">
   <%= link_to '編集', edit_restaurant_path(@restaurant), class: "bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-  <%= link_to '削除', restaurant_path(@restaurant),class: "bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline", data: { turbo_method: :delete, turbo_confirm: 'レストランを削除します。よろしいですか？' } %>
-
+  <%= link_to '削除', restaurant_path(@restaurant), data: {turbo_method: :delete, turbo_confirm: 'レストランを削除します。よろしいですか?'} , class: "bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
 </div>
-<div class="max-w-4xl mx-auto bg-yellow-50 p-8 shadow-lg rounded-lg">
-  <h2 class="text-2xl font-bold mb-2 text-gray-800"><%= @restaurant.name %></h2>
-  <p class="text-md text-gray-600 mb-4">最寄り駅: <%= @restaurant.nearest_station %></p>
-  <p class="text-md text-gray-600 mb-4">予算: ¥<%= @restaurant.budget %></p>
-  <p class="text-md text-gray-600 mb-4">カテゴリ: <%= @restaurant.category %></p>
-  <p class="text-md text-gray-600 mb-4">郵便番号: <%= @restaurant.postal_code %></p>
-  <p class="text-md text-gray-600 mb-4">住所: <%= @restaurant.address %>, <%= @restaurant.city %>, <%= @restaurant.district %></p>
-  <p class="text-md text-gray-600 mb-4">緯度: <%= @restaurant.latitude %>, 経度: <%= @restaurant.longitude %></p>
-  <p class="text-md text-gray-600 mb-4">電話番号: <%= @restaurant.phone_number %></p>
-  <p class="text-md text-gray-600 mb-4">営業時間: <%= @restaurant.business_hours %></p>
-  <p class="text-md text-gray-600 mb-4">説明: <%= @restaurant.description %></p>
 
-  <!-- 画像の表示 -->
+<div class="max-w-4xl mx-auto bg-yellow-50 p-8 shadow-lg rounded-lg">
+  <div class="flex flex-wrap -mx-2">
+    <div class="max-w-4xl w-full md:w-1/2 px-2">
+      <h2 class="text-2xl font-bold mb-2 text-gray-800"><%= @restaurant.name %></h2>
+      <p class="text-md text-gray-600 mb-4"><%= t('restaurants.nearest_station') %>: <%= @restaurant.nearest_station %></p>
+      <p class="text-md text-gray-600 mb-4"><%= t('restaurants.budget') %>: <%= @restaurant.budget %></p>
+      <p class="text-md text-gray-600 mb-4"><%= t('restaurants.category') %>: <%= @restaurant.category %></p>
+      <p class="text-md text-gray-600 mb-4"><%= t('restaurants.description') %>: <%= @restaurant.description %></p>
+    </div>
+
+    <div class="w-full md:w-1/2 px-2">
+      <div id="<%= dom_id(@restaurant, 'map') %>" style="height: 300px;"></div>
+    </div>
+  </div>
+
   <% @restaurant.restaurant_images.each_slice(2) do |images| %>
     <div class="flex flex-col md:flex-row md:space-x-4 mt-4">
       <% images.each do |image| %>
@@ -28,3 +30,36 @@
     </div>
   <% end %>
 </div>
+
+<!-- Googleマップ表示エリア(地図を表示) -->
+<div id="<%= dom_id(@restaurant, 'map') %>" style="width: 50%; height: 300px;"></div>
+
+<!-- Googleマップ表示用の Javascript -->
+<script type="text/javascript">
+  function initMap() {
+    initializeMap(<%= @restaurant.latitude %>, <%= @restaurant.longitude %>, '<%= dom_id(@restaurant, 'map') %>', '<%= j @restaurant.address %>');
+  }
+
+  function initializeMap(lat, lng, mapId, address) {
+    const location = {lat: lat, lng: lng};
+    const map = new google.maps.Map(document.getElementById(mapId), {
+      zoom: 15,
+      center: location
+    });
+
+    const marker = new google.maps.Marker({
+      position: location,
+      map: map,
+      title: address
+    });
+
+    const infowindow = new google.maps.InfoWindow({
+      content: '住所：' + address
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['GOOGLE_MAP_API_KEY'] %>&loading=async&callback=initMap"></script>

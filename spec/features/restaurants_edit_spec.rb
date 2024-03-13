@@ -36,7 +36,7 @@ RSpec.feature 'ホーム画面', type: :feature do
         attach_file 'restaurant_for[restaurant_images][photos][]', Rails.root.join('spec/fixtures/files/images/new_image.jpeg') # 画像パスは適宜調整してください
 
         click_button '更新する'
-
+        save_and_open_page
         expect(page).to have_content '更新されたレストラン名'
         expect(page).to have_content '更新された駅名'
         expect(page).to have_content '6000'

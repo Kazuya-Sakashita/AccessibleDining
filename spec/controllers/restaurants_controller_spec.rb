@@ -31,13 +31,22 @@ RSpec.describe RestaurantsController, type: :controller do
             address: '東京都千代田区G地区13-13-13',
             city: '東京都',
             district: '千代田区',
-            latitude: '123',
-            longitude: '123',
             phone_number: '03-1234-4444',
             business_hours: '12:00 - 23:00',
             description: '居心地良い空間の居酒屋です。'
           }
         }
+      end
+
+      before do
+        Geocoder.configure(lookup: :test)
+        Geocoder::Lookup::Test.set_default_stub([{ coordinates: [35.6895, 139.6917] }])
+      end
+
+      it '住所から緯度と経度が自動計算されていること' do
+        post :create, params: restaurant_params
+        expect(Restaurant.last.latitude).to eq(35.6895)
+        expect(Restaurant.last.longitude).to eq(139.6917)
       end
 
       it '登録時、各パラメータに正しく値が設定された場合、SHOW画面が描画されること' do
@@ -74,8 +83,6 @@ RSpec.describe RestaurantsController, type: :controller do
             address: nil,
             city: nil,
             district: nil,
-            latitude: nil,
-            longitude: nil,
             phone_number: nil,
             business_hours: nil,
             description: nil
@@ -105,8 +112,6 @@ RSpec.describe RestaurantsController, type: :controller do
           '住所を入力してください。',
           '市町村を入力してください。',
           '地区を入力してください。',
-          '緯度を入力してください。',
-          '経度を入力してください。',
           '電話番号を入力してください。',
           '営業時間を入力してください。',
           '説明を入力してください。'
@@ -140,8 +145,6 @@ RSpec.describe RestaurantsController, type: :controller do
             address: '東京都千代田区G地区13-13-13',
             city: '東京都',
             district: '千代田区',
-            latitude: '123',
-            longitude: '123',
             phone_number: '03-1234-4444',
             business_hours: '12:00 - 23:00',
             description: '居心地良い空間の居酒屋です。',
@@ -187,8 +190,6 @@ RSpec.describe RestaurantsController, type: :controller do
             address: nil,
             city: nil,
             district: nil,
-            latitude: nil,
-            longitude: nil,
             phone_number: nil,
             business_hours: nil,
             description: nil
@@ -207,8 +208,6 @@ RSpec.describe RestaurantsController, type: :controller do
           '住所を入力してください。',
           '市町村を入力してください。',
           '地区を入力してください。',
-          '緯度を入力してください。',
-          '経度を入力してください。',
           '電話番号を入力してください。',
           '営業時間を入力してください。',
           '説明を入力してください。'
